@@ -3,9 +3,11 @@ var multer = require('multer');
 var path = require('path');
 var sendToAuthAjax = require('./sendToAuthAjax.json');
 var dragModifyAjax = require('./dragModifyAjax.json');
-
+var bodyParser = require('body-parser');
 
 var app = new Express;
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 var storage = multer.diskStorage({
     destination(req, file, cb) {
         cb(null, path.resolve(__dirname, 'uploads'));
@@ -29,9 +31,41 @@ app.post('/sendToAuthAjax', function(req, res){
     })
 });
 
+let i = 1;
+
 app.post('/dragModifyAjax', (req, res) => {
+    const ret = {};
+    const {itemkey, itemlocation} = req.body;
+    const location = JSON.parse(itemlocation);
+    // Object.keys(location).forEach(e => e === 'width' ||　e === 'height' ? location[e] = ~~(Math.random() * 30) + +location[e] : location[e]);
+    ret[itemkey] = {
+        name: itemkey + '的名',
+        words: '返回的识别字符 （拖拽识别次数： ' + i++ + ' 次）',
+        location
+    };
+
     res.charset = 'utf-8';
-    res.send(dragModifyAjax)
+    setTimeout(() => {
+        res.send({
+            status: 0,
+            msg: '不正常了',
+            data: ret
+        })
+    }, 1)
 })
+
+app.post('/finishEditAjax', (req, res) =>{
+    res.send({
+        status: 0,
+        msg: '不行啊'
+    })
+})
+
+app.post('/sendToAuditAjax', (req, res) =>{
+    res.send({
+        status: 0,
+        msg: '不行啊'
+    })
+});
 
 app.listen(8898)
