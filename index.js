@@ -3,6 +3,7 @@ var multer = require('multer');
 var path = require('path');
 var sendToAuthAjax = require('./sendToAuthAjax.json');
 var bodyParser = require('body-parser');
+var cookie = require('cookie-parser');
 
 var app = new Express;
 app.set('views', path.resolve(__dirname, 'views'));
@@ -11,6 +12,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(Express.static(path.join(__dirname, 'assets')));
+app.use(cookie());
 
 var storage = multer.diskStorage({
     destination(req, file, cb) {
@@ -74,6 +76,10 @@ app.post('/sendToAuditAjax', (req, res) =>{
 });
 
 app.get('/', (req, res) => {
+    res.cookie('name', 'baidu', {
+        expires: new Date(Date.now() + 3600),
+        httpOnly: true
+    })
     res.render('index', {title: 'test', content: '智能核验'})
 });
 
