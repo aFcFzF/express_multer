@@ -2,12 +2,16 @@ var Express = require('express');
 var multer = require('multer');
 var path = require('path');
 var sendToAuthAjax = require('./sendToAuthAjax.json');
-var dragModifyAjax = require('./dragModifyAjax.json');
 var bodyParser = require('body-parser');
 
 var app = new Express;
+app.set('views', path.resolve(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(Express.static(path.join(__dirname, 'assets')));
+
 var storage = multer.diskStorage({
     destination(req, file, cb) {
         cb(null, path.resolve(__dirname, 'uploads'));
@@ -45,6 +49,7 @@ app.post('/dragModifyAjax', (req, res) => {
     };
 
     res.charset = 'utf-8';
+    res.set('cache-control', 'max-age=' + 24 * 3600)
     setTimeout(() => {
         res.send({
             status: 0,
@@ -67,5 +72,11 @@ app.post('/sendToAuditAjax', (req, res) =>{
         msg: '不行啊'
     })
 });
+
+app.get('/', (req, res) => {
+    res.render('index', {title: 'test', content: '智能核验'})
+});
+
+
 
 app.listen(8898)
