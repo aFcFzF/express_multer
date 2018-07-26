@@ -1,9 +1,13 @@
+var http = require('http');
 var Express = require('express');
 var multer = require('multer');
 var path = require('path');
 var sendToAuthAjax = require('./sendToAuthAjax.json');
 var bodyParser = require('body-parser');
 var cookie = require('cookie-parser');
+var socketio = require('socket.io');
+var quest = require('request');
+
 
 var app = new Express;
 app.set('views', path.resolve(__dirname, 'views'));
@@ -11,8 +15,30 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.text());
 app.use(Express.static(path.join(__dirname, 'assets')));
 app.use(cookie());
+
+const server = http.createServer(app);
+const io = socketio(server);
+
+io.on('connection', socket => {
+    console.log('user connected');
+
+    socket.on('disconnect', () => {
+        console.log('a user go out');
+    });
+
+    socket.on('message', obj => {
+        setTimeout(_ => {
+            io.emit('message', {msg: obj.msg + '呵呵呵呵呵呵'});
+        }, 3000);
+    });
+});
+
+app.get('/imRoom', (req, res) => {
+    res.render('socket', {title: 'socket聊天室'});
+});
 
 var storage = multer.diskStorage({
     destination(req, file, cb) {
@@ -30,6 +56,8 @@ app.post('/sendToAuthAjax', function(req, res){
             console.log('错误: ', err);
         }
         // return res.sendStatus(412);
+        console.log('请求: ', req.body.callbackkey)
+        res.set('access-control-allow-origin', '*');
         res.charset = 'utf-8';
         setTimeout(() => {
             res.send(sendToAuthAjax)
@@ -62,6 +90,8 @@ app.post('/dragModifyAjax', (req, res) => {
 })
 
 app.post('/finishEditAjax', (req, res) =>{
+    console.log(req);
+    res.set('access-control-allow-origin', '*');
     res.send({
         status: 0,
         msg: '不行啊'
@@ -75,14 +105,19 @@ app.post('/sendToAuditAjax', (req, res) =>{
     })
 });
 
+app.post('/serverReq', (req, res) => {
+    quest.post('https://gitlab.jsplayer.cn/sendToAuditAjax', {action: 'quest'}, (err, serverRes) => {
+        res.send(JSON.parse(serverRes.body));
+    });
+});
+
 app.get('/', (req, res) => {
     res.cookie('name', 'baidu', {
         expires: new Date(Date.now() + 3600),
-        httpOnly: true
+        // httpOnly: true
+        // secure: true
     })
     res.render('index', {title: 'test', content: '智能核验'})
 });
 
-
-
-app.listen(8898)
+server.listen(8898);

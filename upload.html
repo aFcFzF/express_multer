@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .img-section {
+
+        }
+
+        .caption {
+            vertical-align: top;
+        }
+
+        .wrapper {
+            height: 200px;
+            width: 200px;
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            background: center no-repeat url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTMyNDE2NjI2NDk1IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjE5MjciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNNTc2IDI0MFYxNkg2NHY5OTJoNzM2VjI0MHoiIGZpbGw9IiNFREYyRjgiIHAtaWQ9IjE5MjgiPjwvcGF0aD48cGF0aCBkPSJNNTc2IDE2djIyNGgyMjR6IiBmaWxsPSIjRkZGRkZGIiBwLWlkPSIxOTI5Ij48L3BhdGg+PHBhdGggZD0iTTgxNS45MDQgMjM5LjgyNGExNS41MzYgMTUuNTM2IDAgMCAwLTQuNDY0LTEwLjQ4TDU4Ni42NTYgNC41NmExNS4zNzYgMTUuMzc2IDAgMCAwLTEwLjMzNi00LjQzMkw1NzYgMEg4MGEzMiAzMiAwIDAgMC0zMiAzMnY5NjBhMzIgMzIgMCAwIDAgMzIgMzJoNzA0YTMyIDMyIDAgMCAwIDMyLTMyVjI0MGwtMC4wOTYtMC4xNzZ6TTU5MiA1NC4wOTZMNzYxLjkwNCAyMjRINTkyVjU0LjA5NnpNNzg0IDk5Mkg4MFYzMmg0ODB2MjI0aDIyNHY3MzZ6IiBmaWxsPSIjODU5MkE1IiBwLWlkPSIxOTMwIj48L3BhdGg+PHBhdGggZD0iTTgwMCA1NzZtLTE3NiAwYTE3NiAxNzYgMCAxIDAgMzUyIDAgMTc2IDE3NiAwIDEgMC0zNTIgMFoiIGZpbGw9IiNGRkZGRkYiIHAtaWQ9IjE5MzEiPjwvcGF0aD48cGF0aCBkPSJNODAwIDM4NGMtMTA2LjAzMiAwLTE5MiA4NS45NTItMTkyIDE5MiAwIDEwNi4wMzIgODUuOTY4IDE5MiAxOTIgMTkyczE5Mi04NS45NjggMTkyLTE5MmMwLTEwNi4wNDgtODUuOTY4LTE5Mi0xOTItMTkyeiBtMCAzNTJjLTg4LjM1MiAwLTE2MC03MS42NDgtMTYwLTE2MHM3MS42NDgtMTYwIDE2MC0xNjAgMTYwIDcxLjY0OCAxNjAgMTYwLTcxLjY0OCAxNjAtMTYwIDE2MHogbTY0LTE3NmgtNDh2LTQ4YTE2IDE2IDAgMSAwLTMyIDB2NDhoLTQ4YTE2IDE2IDAgMSAwIDAgMzJoNDh2NDhhMTYgMTYgMCAxIDAgMzIgMHYtNDhoNDhhMTYgMTYgMCAxIDAgMC0zMnoiIGZpbGw9IiM4NTkyQTUiIHAtaWQ9IjE5MzIiPjwvcGF0aD48L3N2Zz4=) ;
+            background-size: 48px 48px;
+            border: solid 1px #eee;
+        }
+
+        .wrapper .lice-pic {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .lice-pic.show {
+            display: block;
+        }
+
+        .ipt:hover {
+            cursor: pointer;
+        }
+
+        .wrapper:hover {
+            cursor: pointer;
+            background-color: #fefefe;
+        }
+
+        .ipt {
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="uploader">
+        <div class="img-section">
+            <span class="caption">图片：</span>
+            <div class="wrapper">
+                <input class="ipt" type="file">
+                <img class="lice-pic" alt="图片">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/1.8.2/jquery.js"></script>
+    <script>
+        const Uploader = class {
+            constructor() {
+                this.init();
+            }
+            init() {
+                const $container = $('.uploader');
+                const $ipt = $container.find('.ipt');
+                $ipt.on('change', () => {
+                    const file = $ipt.get(0).files[0];
+                    file && 
+                    this.uplpad('http://127.0.0.1:8898/sendToAuthAjax', {'lice_pic': file})
+                    .then(data => {
+                        data && this.showPic(file);
+                    })
+                });
+            }
+
+            uplpad (url, data) {
+                const fetch = (url, data, hasFile) => 
+                    Reflect.construct(Promise, [(resolve, reject) => {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('post', url);
+                        xhr.send(data);
+                        xhr.onreadystatechange = () => 
+                            xhr.readyState === 4 && 
+                            ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) && 
+                            resolve(JSON.parse(xhr.responseText));
+                    }]);
+                let d = null;
+                let hasFile = false;
+                hasFile = Object.values(data).some(e => ({}.toString.call(e) === '[object File]'));
+                if (hasFile) {
+                    d = new FormData;
+                    data != null && Object.entries(data).forEach(e => d.append(e[0], e[1]));
+                } else {
+                    data != null && (d = data)
+                }
+
+                return fetch(url, d, true)
+                .then(data => {
+                    return data;
+                })
+                .catch(err => console.error('出错了： ', err));
+            }
+
+            showPic(file) {
+                const elImg = $('.lice-pic');
+                const f = new FileReader;
+                f.readAsDataURL(file);
+                f.onload = _ => {
+                    elImg.attr('src', f.result).addClass('show');
+                };
+            }
+        }
+
+        new Uploader();
+        
+        
+    </script>
+</body>
+</html>

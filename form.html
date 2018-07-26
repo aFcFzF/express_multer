@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        form {
+            background: #eee;
+            border: solid 1px #000;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form action="http://127.0.0.1:8898/sendToAuthAjax" method="post" enctype="multipart/form-data">
+        <label>姓名: <input type="text" name="username"></label>
+        <br>
+        <label>性别: <input type="radio" name="gender" value="male" checked><input type="radio" name="gender" value="female"></label>
+        <input type="file" name="lice_pic">
+        <br>
+        <input type="submit" value="提交">
+    </form>
+    <button class="btn">发请求</button>
+    <input type="file" class="getFile">
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/1.8.2/jquery.js"></script>
+<script>
+     const d = new FormData();
+    $('.btn').click(e => 
+        $.ajax({
+            url: 'http://127.0.0.1:8898/sendToAuthAjax',
+            type: 'post',
+            data: d,
+            processData: false,
+            contentType: false,
+            success (data) {
+                console.log(data)
+            },
+            error (err) {
+                console.error('出错了： ', err)
+            }
+        })
+    );
+
+    const ipt = $('.getFile');
+    ipt.on('change', e => {
+        const f = e.target.files[0];
+        // const reader = new FileReader;
+        d.append('name', 'baidu')
+        d.append('lice_picon', f)
+        // reader.readAsArrayBuffer(f)
+        // reader.onload = e => {
+        //     d.append('lice_pic', reader.result);
+        // }
+        
+
+    })
+</script>
+</html>
