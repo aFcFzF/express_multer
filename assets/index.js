@@ -21,6 +21,7 @@
         $.ajax({
             url: 'https://gitlab.jsplayer.cn/finishEditAjax',
             type: 'post',
+            async: false,
             data: {
                 type1: 'string',
                 type2: 'number',
@@ -31,7 +32,10 @@
             },
             contentType: 'application/x-www-form-urlencoded'
         })
-        .then(data => console.log('结果是: ', data));
+        .then(data =>  {
+            window.open('http://www.baidu.com');
+            console.log('结果是: ', data)
+        });
     });
 
     btn4 = $('.serverReq').click(() => {

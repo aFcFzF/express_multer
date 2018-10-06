@@ -1,3 +1,4 @@
+
 var http = require('http');
 var Express = require('express');
 var multer = require('multer');
@@ -40,29 +41,49 @@ app.get('/imRoom', (req, res) => {
     res.render('socket', {title: 'socket聊天室'});
 });
 
+app.get('/xss', (req, res) => {
+    res.render('xss', {title: 'xss-test'});
+});
+
+app.get('/301', (req, res) => {
+    // res.head('301', '永久转向');
+    // res.redirect('/error');
+    // res.writeHead(301, {
+    //     location: '/error'
+    // });
+    res.status(302);
+    res.location('back');
+    res.end();
+});
+
+app.get('/error', (req, res) => {
+    res.render('xss', {title: 'error'});
+});
+
 var storage = multer.diskStorage({
     destination(req, file, cb) {
         cb(null, path.resolve(__dirname, 'uploads'));
     },
     filename(req, file, cb) {
-        cb(null, file.originalname)
+        cb(null, file.originalname);
     }
 });
 var upload = multer({storage}).single('lice_pic');
 
-app.post('/sendToAuthAjax', function(req, res){
-    upload(req, res, function(err) {
+app.post('/sendToAuthAjax', function (req, res) {
+    upload(req, res, function (err) {
         if (err) {
             console.log('错误: ', err);
         }
         // return res.sendStatus(412);
-        console.log('请求: ', req.body.callbackkey)
+        console.log('请求: ', req.body);
+        res.set('access-control-allow-credentials', true);
         res.set('access-control-allow-origin', '*');
         res.charset = 'utf-8';
         setTimeout(() => {
-            res.send(sendToAuthAjax)
+            res.send(sendToAuthAjax);
         }, 1000);
-    })
+    });
 });
 
 let i = 1;
@@ -79,31 +100,31 @@ app.post('/dragModifyAjax', (req, res) => {
     };
 
     res.charset = 'utf-8';
-    res.set('cache-control', 'max-age=' + 24 * 3600)
+    res.set('cache-control', 'max-age=' + 24 * 3600);
     setTimeout(() => {
         res.send({
             status: 0,
             msg: '不正常了',
             data: ret
-        })
-    }, 1)
-})
+        });
+    }, 1);
+});
 
-app.post('/finishEditAjax', (req, res) =>{
+app.post('/finishEditAjax', (req, res) => {
     console.log(req);
     res.set('access-control-allow-origin', '*');
     res.send({
         status: 0,
         msg: '不行啊'
-    })
-})
+    });
+});
 
-app.post('/sendToAuditAjax', (req, res) =>{
+app.post('/sendToAuditAjax', (req, res) =>
     res.send({
         status: 0,
         msg: '不行啊'
     })
-});
+);
 
 app.post('/serverReq', (req, res) => {
     quest.post('https://gitlab.jsplayer.cn/sendToAuditAjax', {action: 'quest'}, (err, serverRes) => {
@@ -112,12 +133,12 @@ app.post('/serverReq', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.cookie('name', 'baidu', {
-        expires: new Date(Date.now() + 3600),
-        // httpOnly: true
-        // secure: true
-    })
-    res.render('index', {title: 'test', content: '智能核验'})
+    res.render('index', {title: 'test', content: '智能核验'});
+});
+
+app.get('/mvvm', (req, res) => {
+    res.render('mvvm', {title: 'mvvm-learn'});
 });
 
 server.listen(8898);
+console.log('server runing in 8898');

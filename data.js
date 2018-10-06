@@ -7,8 +7,18 @@ app.use(urlencoded({extended: false}));
 app.use(json());
 app.use(text());
 
+
+app.options('/dataAjax', (req, res) => {
+    res.header({
+        'access-control-allow-methods': 'get,post,put,delete'
+    });
+    res.status(200);
+});
+
 app.post('/dataAjax', (req, res) => {
-    req.body.auth ? res.send({status: 0, msg: 'success'}) : res.send({status: 1, msg: '未通过验证'})
+    res.set('access-control-allow-origin', '*');
+    const r = _ => req.body.auth ? res.send({status: 0, msg: 'success'}) : res.send({status: 1, msg: '未通过验证'});
+    setTimeout(r ,30000);
 });
 
 app.get('/', (req, res) => {

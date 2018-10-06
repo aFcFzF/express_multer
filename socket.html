@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" class="ipt">
+    <br>
+    <button class="btn">发送一条</button>
+    <br>
+    <textarea name="receive" id="recv" cols="30" rows="10"></textarea>
+    <script src="https://cdn.bootcss.com/socket.io/2.1.1/socket.io.js"></script>
+    <script>
+        var txtArea = document.querySelector('#recv');
+        var socket = io('http://gitlab.jsplayer.cn:8001');
+        socket.on('message', function(data) {
+            txtArea.value += txtArea.value + '\n'
+        });
+        var btn = document.querySelector('.btn');
+        var ipt = document.querySelector('.ipt');
+        btn.onclick = function() {
+            socket.emit('message', ipt.value);
+        }
+    
+    </script> 
+</body>
+</html>

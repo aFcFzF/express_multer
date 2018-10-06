@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    ul,
+    li,
+    p {
+        padding: 0;
+        margin: 0;
+    }
+
+    .list {
+        padding-left: 20px;
+        cursor: pointer;
+    }
+
+    .list.expand {
+        height: auto;
+    }
+
+    .title {
+        font-weight: 700;
+    }
+
+    .title::before {
+        content: '';
+        display: inline-block;
+        height: 0;
+        width: 0;
+        border: solid 5px;
+        border-color: transparent transparent transparent #666;
+    }
+
+    .list {
+        height: 0;
+        overflow: hidden;
+    }
+
+    .box > .list:first-of-type {
+        height: auto;
+    }
+
+    .box {
+        position: relative;
+    }
+
+    .title.expand::before {
+        transform: rotate(90deg);
+    }
+
+    .text::after {
+        content: '';
+        display: block;
+        border-bottom: solid 1px #eee;
+    }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+<script>
+const c = tagName => document.createElement(tagName);
+const list = [{
+    value: 0,
+    children: [
+        {
+            value: 1,
+            children: [{
+                value: 3
+            }]
+        },
+        {
+            value: 2,
+            children: [{
+                value: 4,
+                children: [
+                    {
+                        value: 5
+                    },
+                    {
+                        value: 6
+                    }
+                ]
+            }]
+        }
+    ]
+}];
+
+const expHdl = e => {
+    const l = e.target.nextSibling;
+    l.classList.toggle('expand');
+    // childLists.forEach(e => e.classList.add('expand'));
+};
+
+const proc = list => {
+    const ul = c('div');
+    ul.setAttribute('class', 'list');
+    list.forEach(e => {
+        const li = c('div');
+        const elTitle = c('p');
+        elTitle.classList.add('text');
+        elTitle.innerText = e.value;
+        elTitle.addEventListener('click', expHdl);
+        li.appendChild(elTitle);
+        e.children && e.children.length && li.appendChild(proc(e.children)) && elTitle.classList.add('title');
+        ul.appendChild(li);
+    });
+    return ul;
+};
+
+const ul = proc(list);
+document.querySelector('.box').appendChild(ul);
+
+</script>
+</body>
+</html>

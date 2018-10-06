@@ -21,7 +21,3 @@ io.on('connection', socket => {
 });
 
 server.listen(3001);
-
-app.get('/imRoom', (req, res, next) => {
-    res.send('im/imRoom');
-});

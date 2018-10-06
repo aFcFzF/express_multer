@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%=title%></title>
+</head>
+<body>
+    <div id="mvvm-app">
+        <input type="text" v-model="word">
+        <p>{{text}}</p>
+        <button v-on:click="clkHandler">改变下文字？</button>
+    </div>
+    <script type="module">
+        import('./mvvm.js').then(({default: Vue}) => {
+            window.app = new Vue({
+                el: '#app',
+                data: {
+                    name: 'baidu',
+                    age: 20,
+                    stuff: 40000,
+                    department: {
+                        ue: 30,
+                        fe: 40,
+                        rd: 50
+                    }
+                },
+
+                methods: {
+                    changeName() {
+                        this.stuff = Math.random() * 1000 >> 1;
+                    }
+                },
+
+                watch: {
+                    stuff(newVal, oldVal) {
+                        console.log('watch到了stuff： ', newVal, oldVal);
+                    },
+                    'department.ue'(newVal, oldVal) {
+                        console.log('watch到了department： ', newVal, oldVal);
+                    }
+                }
+            });
+
+            app.on('eventTest', e => console.log('接受到事件： ', e));
+        })
+    </script>
+</body>
+</html>

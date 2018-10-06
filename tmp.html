@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button class="getData">请求</button>
+    <script>
+    const ajax = options => {
+        if (!options.url) {
+            throw new Error('url must be assign');
+        }
+
+        const config = Object.assign({
+            type: 'get',
+            data: {},
+            withCredentials: false,
+            async: true,
+            responseType: 'json',
+            formData: false,
+            header: 'application/x-www-form-urlencoded'
+        }, options);
+
+        if (!window.XMLHttpRequest) {
+            throw new Error('current env has not suppprt ajax');
+        }
+        const xhr = new XMLHttpRequest();
+        xhr.open(config.type, config.url, config.async); // ??
+        const {withCredentials, responseType, header} = config;
+        Object.assign(xhr, {
+            withCredentials,
+            responseType
+        });
+        let d = config.data;
+        if (!config.formData) {
+            xhr.setRequestHeader('content-type', header);
+            d = Object.entries(config.data).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+        }
+        xhr.send(d);
+        return new Promise((r, j) => {
+            xhr.onreadystatechange = _ =>
+            xhr.readyState === 4 && ((xhr.status >= 200 && xhr.status <= 300) || xhr.status === 304)
+            && r(xhr.response);
+        });
+    };
+
+    const btn = document.querySelector('.getData');
+    btn.addEventListener('click', e => {
+        ajax({
+            url: 'http://127.0.0.1:8898/sendToAuthAjax',
+            type: 'post',
+            data: {
+                name: 'baidu',
+                age: 20,
+                ext: '𠮷'
+            },
+            withCredentials: true
+        })
+        .then(data => console.log('返回的数据是： ', data))
+        .catch(err => console.error('发生了错误: ', err));
+    });
+    </script>
+</body>
+</html>
